@@ -23,15 +23,13 @@ ml-analyst-sivigila/
 |   |-- raw/               # Datos originales (sin procesar)
 |   |-- processed/         # Datos limpios o transformados
 |   
-|
 |-- notebooks/             # Análisis paso a paso
 |   |-- 01_EDA.ipynb
 |   |-- 02_Limpieza.ipynb
 |
 |-- src/                   # Código fuente modular
-|   |-- data_preprocessing.py
-|   |-- visualization.py
-|   |-- models/
+|   |-- data_utils.py
+|   |-- visualization_utils.py
 |
 |-- reports/               # Articulos
 |
