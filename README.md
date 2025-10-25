@@ -33,9 +33,7 @@ ml-analyst-sivigila/
 |   |-- visualization.py
 |   |-- models/
 |
-|-- reports/               # Resultados, gráficos y reportes
-|   |-- figures/
-|   |-- summaries/
+|-- reports/               # Articulos
 |
 |-- requirements.txt       # Librerías necesarias
 |-- README.md
