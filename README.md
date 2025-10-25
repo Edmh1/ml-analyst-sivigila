@@ -18,24 +18,24 @@ Este proyecto busca aplicar técnicas de **análisis exploratorio de datos (EDA)
 
 ```bash
 ml-analyst-sivigila/
-│
+|
 |-- data/                  # Conjuntos de datos
-│   |-- raw/               # Datos originales (sin procesar)
-│   |-- processed/         # Datos limpios o transformados
-│   
-│
+|   |-- raw/               # Datos originales (sin procesar)
+|   |-- processed/         # Datos limpios o transformados
+|   
+|
 |-- notebooks/             # Análisis paso a paso
-│   |-- 01_EDA.ipynb
-│   |-- 02_Limpieza.ipynb
-│
+|   |-- 01_EDA.ipynb
+|   |-- 02_Limpieza.ipynb
+|
 |-- src/                   # Código fuente modular
-│   |-- data_preprocessing.py
-│   |-- visualization.py
-│   |-- models/
-│
+|   |-- data_preprocessing.py
+|   |-- visualization.py
+|   |-- models/
+|
 |-- reports/               # Resultados, gráficos y reportes
-│   |-- figures/
-│   |-- summaries/
-│
+|   |-- figures/
+|   |-- summaries/
+|
 |-- requirements.txt       # Librerías necesarias
 |-- README.md
