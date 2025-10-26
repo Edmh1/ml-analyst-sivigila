@@ -1,6 +1,6 @@
 # ml-analyst-sivigila (DENGUE 2022-2024)
 
-Análisis exploratorio y modelado de datos epidemiológicos del sistema SIVIGILA (Colombia) centrado en la patologia DENGUE en el periodo de 2022-2024, enfocado en detectar patrones, tendencias y posibles predicciones de enfermedades como el dengue en relación con variables ambientales y temporales.
+Análisis exploratorio y modelado de datos epidemiológicos del sistema SIVIGILA (Colombia) centrado en la patologia DENGUE en el periodo de 2022-2024, enfocado en detectar patrones, tendencias y posibles predicciones de enfermedades como el dengue.
 
 ---
 
