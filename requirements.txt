@@ -1,3 +1,18 @@
-jupyter
+# Dataframes 
 pandas
+
+# Cálculos numéricos
+numpy
+
+# Visualización
+matplotlib
+seaborn
+
+# Modelado y machine learning
+scikit-learn
+
+# Lectura de archivos Excel
 openpyxl
+
+# Uso en Jupyter Notebook
+jupyter
