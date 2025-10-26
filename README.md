@@ -24,8 +24,7 @@ ml-analyst-sivigila/
 |   |-- processed/         # Datos limpios o transformados
 |   
 |-- notebooks/             # Análisis paso a paso
-|   |-- 01_EDA.ipynb
-|   |-- 02_Limpieza.ipynb
+|   |-- main_pipeline.ipynb
 |
 |-- src/                   # Código fuente modular
 |   |-- data_utils.py
