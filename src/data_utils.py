@@ -34,59 +34,79 @@ def cargar_archivos_excel():
 
 def verificar_referencia_columnas(dict_df: dict):
     """
-    Validar que todos los DataFrames en el diccionario tengan las mismas columnas.(sin importar el orden)
-    Tomando como referencia el último DataFrame.
+    Valida que todos los DataFrames en el diccionario tengan las mismas columnas,
+    sin importar el orden. Usa como referencia el último DataFrame cargado.
 
     Args:
-        dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
-
-    Raises:
-        ValueError: Si los archivos no tienen las mismas columnas.
+        dict_df (dict): Diccionario {nombre_archivo: polars.DataFrame}
 
     Returns:
-        columns_reference (list): Lista de nombres de columnas comunes.
+        reference_df (pl.DataFrame): El DataFrame de referencia.
+        columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
     """
+    # Archivo y columnas de referencia
     archivo_ref = list(dict_df.keys())[-1]
-    columns_reference = dict_df[archivo_ref].columns.tolist()
-    for nombre, df in dict_df.items():
-        if set(df.columns) != set(columns_reference):
-            print(f"El archivo '{nombre}' no tiene las mismas columnas que el archivo de referencia '{archivo_ref}'.")
-            for col in df.columns:
-                if df[col].dtype != 'consecutive_origen':
-                    if col not in columns_reference:
-                        print(f"-Falta la columna: {col} de tipo {df[col].dtype}")
-                continue
+    df_ref = dict_df[archivo_ref]
+    columnas_ref = set(df_ref.columns)
 
-            
-    print('\nEl archivo de referencia para las columnas es:', archivo_ref)
-    return dict_df[archivo_ref]
+    print(f"\nEl Archivo de referencia para las columnas es: '{archivo_ref}'\n")
 
-def verificar_tipo_columnas(dict_df: dict):
+    diferencias_encontradas = False 
+    list_df = list(dict_df.items())
+    # Comparar con los demás archivos
+    columnas_en_comun = columnas_ref.copy()
+    for nombre, df in list_df[:-1]:
+        columnas_actual = set(df.columns)
+
+        columnas_en_comun &= columnas_actual
+
+        faltan = columnas_ref - columnas_actual
+        sobran = columnas_actual - columnas_ref
+
+        if faltan or sobran:
+            diferencias_encontradas = True
+            print(f"Diferencias encontradas en el archivo'{nombre}':")
+
+            if faltan:
+                print("Faltan columnas respecto al archivo de referencia:")
+                for col in sorted(faltan):
+                    dtype_ref = df_ref[col].dtype
+                    print(f"    - {col} (tipo esperado: {dtype_ref})")
+
+            if sobran:
+                print("Columnas adicionales no presentes en el archivo de referencia:")
+                for col in sorted(sobran):
+                    dtype_actual = df[col].dtype
+                    print(f"    - {col} (tipo actual: {dtype_actual})")
+
+            print()
+
+    if not diferencias_encontradas:
+        print("Todos los archivos tienen las mismas columnas.\n")
+
+    return df_ref, columnas_en_comun
+
+
+def verificar_tipo_columnas(dict_df: dict, columnas_en_comun: set):
     """
     Validar que todos los DataFrames en el diccionario tengan los mismos tipos de datos en las columnas,
     tomando como referencia el último DataFrame.
-
+ 
     Args:
         dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
-
-    Raises:
-        ValueError: Si los archivos no tienen los mismos tipos de datos en las columnas.
-
-    Returns:
-        dtypes_reference (pd.Series): Serie con los tipos de datos de las columnas del DataFrame de referencia.
+        columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
     """
     archivo_ref = list(dict_df.keys())[-1]
-    dtypes_reference = dict_df[archivo_ref].dtypes
-    for nombre, df in dict_df.items():
-        for col in df.columns:
-            if df[col].dtype != 'consecutive_origen':
-                if df[col].dtype != dtypes_reference[col]:
-                    print(f"El archivo '{nombre}' tiene un tipo de dato diferente en la columna '{col}': "
-                        f"{df[col].dtype} (esperado: {dtypes_reference[col]})")
-            continue
-                
-    print('\nEl archivo de referencia para los tipos de datos es:', archivo_ref)
-    return dict_df[archivo_ref]
+    ref = dict_df[archivo_ref]
+
+    lista_df = list(dict_df.items())
+    for nombre, df in lista_df[:-1]:
+        for col in columnas_en_comun:
+            tipo_ref = ref[col].dtypes
+            tipo_actual = df[col].dtypes
+            if tipo_ref != tipo_actual:
+                print(f"Tipo de dato diferente en archivo '{nombre}', columna '{col}': (esperado: {tipo_ref}, actual: {tipo_actual})")
+        print()
 
 def unir_excels(dict_df: dict):
     """
