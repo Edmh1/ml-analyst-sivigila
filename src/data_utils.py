@@ -7,37 +7,30 @@ def convertir_excel_a_parquet():
     Carga todos los archivos .xlsx de data/raw y los guarda como .parquet
     en el directorio 'data/processed'.
     """
-   
-    # Definir rutas
+
     resolved_path = Path(__file__).resolve().parent.parent
     raw_path = resolved_path / 'data' / 'raw'
     processed_path = resolved_path / 'data' / 'processed'
 
-    # Crear el directorio de salida si no existe
     processed_path.mkdir(parents=True, exist_ok=True)
 
-    # Buscar y Cargar Excel
     archivos_excel = glob.glob(str(raw_path / '*.xlsx'))
     if not archivos_excel:
         raise FileNotFoundError(f"No se encontraron archivos .xlsx en {raw_path}")
     
     print(f"Iniciando conversión de {len(archivos_excel)} archivos...")
 
-    # Leer y Guardar en Parquet
     for archivo_xlsx in archivos_excel:
         nombre = Path(archivo_xlsx).stem 
         
-        # Cargar el Excel
         df = pd.read_excel(archivo_xlsx)
         
-        # Guardar en Parquet (archivo binario optimizado)
         archivo_parquet = processed_path / f'{nombre}.parquet'
         df.to_parquet(archivo_parquet, index=False)
         
         print(f"Convertido y guardado: {nombre}.parquet")
         
     print("\nConversión completada. Todos los archivos se han guardado en formato Parquet en 'data/processed'.")
-
 
 def cargar_archivos_parquet():
     """
@@ -47,11 +40,10 @@ def cargar_archivos_parquet():
     Returns:
         dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
     """
-    # Ruta a la carpeta con los archivos Parquet
+
     resolved_path = Path(__file__).resolve().parent.parent
     base_path = resolved_path / 'data' / 'processed'
 
-    # Buscar todos los Parquet en esa ruta
     archivos_parquet = glob.glob(str(base_path / '*.parquet'))
 
     if not archivos_parquet:
@@ -71,35 +63,38 @@ def cargar_archivos_parquet():
 
     return dict_df
 
-
 def verificar_referencia_columnas(dict_df: dict):
     """
-    Valida que todos los DataFrames en el diccionario tengan las mismas columnas,
-    sin importar el orden. Usa como referencia el último DataFrame cargado.
+    Valida que todos los DataFrames en el diccionario tengan las mismas columnas
+    (sin importar el orden), tomando como referencia el último DataFrame cargado.
 
     Args:
-        dict_df (dict): Diccionario {nombre_archivo: polars.DataFrame}
+        dict_df (dict): Diccionario con la forma {nombre_archivo: pandas.DataFrame}.
 
     Returns:
-        reference_df (pl.DataFrame): El DataFrame de referencia.
-        columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
+        tuple:
+            reference_df (pd.DataFrame): DataFrame de referencia.
+            columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
     """
-    # Archivo y columnas de referencia
+
     archivo_ref = list(dict_df.keys())[-1]
     df_ref = dict_df[archivo_ref]
     columnas_ref = set(df_ref.columns)
 
     print(f"\nEl Archivo de referencia para las columnas es: '{archivo_ref}'\n")
 
+    # Inicializar variables de seguimiento
     diferencias_encontradas = False 
-    list_df = list(dict_df.items())
-    # Comparar con los demás archivos
     columnas_en_comun = columnas_ref.copy()
+    
+    # Comparar con los demás archivos
+    list_df = list(dict_df.items())
     for nombre, df in list_df[:-1]:
+        
         columnas_actual = set(df.columns)
 
+        # Actualizar columnas en común y diferencias
         columnas_en_comun &= columnas_actual
-
         faltan = columnas_ref - columnas_actual
         sobran = columnas_actual - columnas_ref
 
@@ -126,7 +121,6 @@ def verificar_referencia_columnas(dict_df: dict):
 
     return df_ref, columnas_en_comun
 
-
 def verificar_tipo_columnas(dict_df: dict, columnas_en_comun: set):
     """
     Validar que todos los DataFrames en el diccionario tengan los mismos tipos de datos en las columnas,
@@ -136,9 +130,11 @@ def verificar_tipo_columnas(dict_df: dict, columnas_en_comun: set):
         dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
         columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
     """
+
     archivo_ref = list(dict_df.keys())[-1]
     ref = dict_df[archivo_ref]
 
+    # comparar tipos de datos con los demás archivos
     lista_df = list(dict_df.items())
     for nombre, df in lista_df[:-1]:
         for col in columnas_en_comun:
@@ -158,10 +154,8 @@ def unir_df(dict_df: dict):
     Returns: 
         df_total (pandas.DataFrame): DataFrame resultante de la concatenación de todos los DataFrames.
     """
-    # Convertir el diccionario de DataFrames en una lista de DataFrames
-    lista_df = list(dict_df.values())
 
-    # Concatenar los DataFrames
+    lista_df = list(dict_df.values())
     df_total = pd.concat(lista_df, ignore_index=True)
 
     return df_total
@@ -174,7 +168,7 @@ def guardar_df(df: pd.DataFrame, nombre_archivo: str):
         df (pandas.DataFrame): El DataFrame a guardar.
         nombre_archivo (str): El nombre del archivo (sin extensión).
     """
-    # Ruta absoluta a la carpeta data/processed
+    
     resolved_path = Path(__file__).resolve().parent.parent
     processed_path = resolved_path / 'data' / 'processed'
     processed_path.mkdir(parents=True, exist_ok=True) 
