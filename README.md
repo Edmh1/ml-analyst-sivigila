@@ -30,7 +30,7 @@ ml-analyst-sivigila/
 |   |-- data_utils.py
 |   |-- visualization_utils.py
 |
-|-- reports/               # Articulos
+|-- references/               # Articulos y Referencias
 |
 |-- requirements.txt       # Librerías necesarias
 |-- README.md
