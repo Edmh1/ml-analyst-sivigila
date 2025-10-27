@@ -1,8 +1,14 @@
+# visualizacion 
+ydata-profiling
+
 # Dataframes 
 pandas
 
 # Cálculos numéricos
 numpy
+
+#formato parquet
+pyarrow
 
 # Visualización
 matplotlib

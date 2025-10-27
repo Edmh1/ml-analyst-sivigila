@@ -2,35 +2,75 @@ from pathlib import Path
 import pandas as pd
 import glob
 
-def cargar_archivos_excel():
+def convertir_excel_a_parquet():
     """
-    Carga todos los archivos .xlsx desde data/raw y los devuelve como un diccionario
+    Carga todos los archivos .xlsx de data/raw y los guarda como .parquet
+    en el directorio 'data/processed'.
+    """
+   
+    # Definir rutas
+    resolved_path = Path(__file__).resolve().parent.parent
+    raw_path = resolved_path / 'data' / 'raw'
+    processed_path = resolved_path / 'data' / 'processed'
+
+    # Crear el directorio de salida si no existe
+    processed_path.mkdir(parents=True, exist_ok=True)
+
+    # Buscar y Cargar Excel
+    archivos_excel = glob.glob(str(raw_path / '*.xlsx'))
+    if not archivos_excel:
+        raise FileNotFoundError(f"No se encontraron archivos .xlsx en {raw_path}")
+    
+    print(f"Iniciando conversión de {len(archivos_excel)} archivos...")
+
+    # Leer y Guardar en Parquet
+    for archivo_xlsx in archivos_excel:
+        nombre = Path(archivo_xlsx).stem 
+        
+        # Cargar el Excel
+        df = pd.read_excel(archivo_xlsx)
+        
+        # Guardar en Parquet (archivo binario optimizado)
+        archivo_parquet = processed_path / f'{nombre}.parquet'
+        df.to_parquet(archivo_parquet, index=False)
+        
+        print(f"Convertido y guardado: {nombre}.parquet")
+        
+    print("\nConversión completada. Todos los archivos se han guardado en formato Parquet en 'data/processed'.")
+
+
+def cargar_archivos_parquet():
+    """
+    Carga todos los archivos .parquet desde data/processed y los devuelve como un diccionario.
     donde las claves son los nombres de archivo (sin extensión) y los valores los DataFrames.
 
     Returns:
         dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
     """
-    # Ruta absoluta a la carpeta data/raw
+    # Ruta a la carpeta con los archivos Parquet
     resolved_path = Path(__file__).resolve().parent.parent
-    base_path = resolved_path / 'data' / 'raw'
+    base_path = resolved_path / 'data' / 'processed'
 
-    # Buscar todos los Excel en esa ruta
-    archivos = glob.glob(str(base_path / '*.xlsx'))
+    # Buscar todos los Parquet en esa ruta
+    archivos_parquet = glob.glob(str(base_path / '*.parquet'))
 
-    if not archivos:
-        raise FileNotFoundError(f"No se encontraron archivos .xlsx en {base_path}")
+    if not archivos_parquet:
+        raise FileNotFoundError(
+            f"No se encontraron archivos .parquet en {base_path}. ¿Ejecutaste la función de conversión?"
+        )
     
     # Crear el diccionario: clave = nombre del archivo, valor = DataFrame
     dict_df = {}
-    for archivo in archivos:
+    for archivo in archivos_parquet:
         nombre = Path(archivo).stem 
-        dict_df[nombre] = pd.read_excel(archivo)
+        dict_df[nombre] = pd.read_parquet(archivo)
 
 
-    print(f"Se cargaron {len(dict_df)} archivos Excel desde {base_path}")
+    print(f"Se cargaron {len(dict_df)} archivos Parquet desde {base_path}")
     print("Nombres de los archivos cargados:", list(dict_df.keys()))
 
     return dict_df
+
 
 def verificar_referencia_columnas(dict_df: dict):
     """
@@ -108,7 +148,7 @@ def verificar_tipo_columnas(dict_df: dict, columnas_en_comun: set):
                 print(f"Tipo de dato diferente en archivo '{nombre}', columna '{col}': (esperado: {tipo_ref}, actual: {tipo_actual})")
         print()
 
-def unir_excels(dict_df: dict):
+def unir_df(dict_df: dict):
     """
     Concatenar un conjuntos de dataframes provenientes de un diccionario, en uno solo dataframe.
 
@@ -126,9 +166,9 @@ def unir_excels(dict_df: dict):
 
     return df_total
 
-def guardar_dataframe(df: pd.DataFrame, nombre_archivo: str):
+def guardar_df(df: pd.DataFrame, nombre_archivo: str):
     """
-    Guarda un DataFrame en la carpeta data/processed como un archivo .csv.
+    Guarda un DataFrame en la carpeta data/processed como un archivo .parquet.
 
     Args:
         df (pandas.DataFrame): El DataFrame a guardar.
@@ -139,5 +179,5 @@ def guardar_dataframe(df: pd.DataFrame, nombre_archivo: str):
     processed_path = resolved_path / 'data' / 'processed'
     processed_path.mkdir(parents=True, exist_ok=True) 
 
-    ruta_guardado = processed_path / f"{nombre_archivo}.csv"
-    df.to_csv(ruta_guardado, index=False)
+    ruta_guardado = processed_path / f"{nombre_archivo}.parquet"
+    df.to_parquet(ruta_guardado, index=False)
