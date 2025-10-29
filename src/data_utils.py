@@ -121,29 +121,6 @@ def verificar_referencia_columnas(dict_df: dict):
 
     return df_ref, columnas_en_comun
 
-def verificar_tipo_columnas(dict_df: dict, columnas_en_comun: set):
-    """
-    Validar que todos los DataFrames en el diccionario tengan los mismos tipos de datos en las columnas,
-    tomando como referencia el último DataFrame.
- 
-    Args:
-        dict_df (dict): Diccionario {nombre_archivo: pandas.DataFrame}
-        columnas_en_comun (set): Conjunto de nombres de columnas comunes a todos los DataFrames.
-    """
-
-    archivo_ref = list(dict_df.keys())[-1]
-    ref = dict_df[archivo_ref]
-
-    # comparar tipos de datos con los demás archivos
-    lista_df = list(dict_df.items())
-    for nombre, df in lista_df[:-1]:
-        for col in columnas_en_comun:
-            tipo_ref = ref[col].dtypes
-            tipo_actual = df[col].dtypes
-            if tipo_ref != tipo_actual:
-                print(f"Tipo de dato diferente en archivo '{nombre}', columna '{col}': (esperado: {tipo_ref}, actual: {tipo_actual})")
-        print()
-
 def unir_df(dict_df: dict):
     """
     Concatenar un conjuntos de dataframes provenientes de un diccionario, en uno solo dataframe.
