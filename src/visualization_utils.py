@@ -27,4 +27,4 @@ def show_report_link(report_name, display_name=None):
     if display_name is None:
         display_name = report_name
     
-    display(Markdown(f"[{display_name}]({url_report(report_name)})"))
+    display(Markdown(f"Opcionalmente, tambien puede visualizar el reporte en el siguiente enlace: [{display_name}]({url_report(report_name)})"))
