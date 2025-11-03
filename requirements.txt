@@ -14,7 +14,6 @@ pyarrow
 matplotlib
 seaborn
 geopandas
-folium
 
 # Modelado y machine learning
 scikit-learn
