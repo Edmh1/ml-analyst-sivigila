@@ -13,6 +13,7 @@ pyarrow
 # Visualización
 matplotlib
 seaborn
+geopandas
 
 # Modelado y machine learning
 scikit-learn
