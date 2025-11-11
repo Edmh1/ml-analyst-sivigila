@@ -22,6 +22,7 @@ ml-analyst-sivigila/
 |-- data/                  # Conjuntos de datos
 |   |-- raw/               # Datos originales (sin procesar)
 |   |-- processed/         # Datos limpios o transformados
+|   |-- parquet/           # Datos en formato parquet.
 |   
 |-- notebooks/             # Análisis paso a paso
 |   |-- main_pipeline.ipynb

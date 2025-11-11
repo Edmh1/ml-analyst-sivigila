@@ -5,12 +5,12 @@ import glob
 def convertir_excel_a_parquet():
     """
     Carga todos los archivos .xlsx de data/raw y los guarda como .parquet
-    en el directorio 'data/processed'.
+    en el directorio 'data/parquet'.
     """
 
     resolved_path = Path(__file__).resolve().parent.parent
     raw_path = resolved_path / 'data' / 'raw'
-    processed_path = resolved_path / 'data' / 'processed'
+    processed_path = resolved_path / 'data' / 'parquet'
 
     processed_path.mkdir(parents=True, exist_ok=True)
 
@@ -34,7 +34,7 @@ def convertir_excel_a_parquet():
 
 def cargar_archivos_parquet():
     """
-    Carga todos los archivos .parquet desde data/processed y los devuelve como un diccionario.
+    Carga todos los archivos .parquet desde data/parquet y los devuelve como un diccionario.
     donde las claves son los nombres de archivo (sin extensión) y los valores los DataFrames.
 
     Returns:
@@ -42,7 +42,7 @@ def cargar_archivos_parquet():
     """
 
     resolved_path = Path(__file__).resolve().parent.parent
-    base_path = resolved_path / 'data' / 'processed'
+    base_path = resolved_path / 'data' / 'parquet'
 
     archivos_parquet = glob.glob(str(base_path / '*.parquet'))
 
