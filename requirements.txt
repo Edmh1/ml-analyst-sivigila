@@ -15,8 +15,10 @@ matplotlib
 seaborn
 geopandas
 
-# Modelado y machine learning
+# Modelado, machine learning, deep learning
 scikit-learn
+tensorflow
+scikeras
 
 # Lectura de archivos Excel
 openpyxl
