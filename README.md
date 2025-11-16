@@ -37,3 +37,52 @@ ml-analyst-sivigila/
 |
 |-- requirements.txt       # Librerías necesarias
 |-- README.md
+```
+
+## 3. Cómo replicar el proyecto
+
+Sigue estos pasos para ejecutar el proyecto en tu máquina local:
+
+###  **3.0 Requisitos previos**
+
+Asegúrate de tener instalado:
+
+- **Python 3.10 o superior**
+- **Git**
+- Un gestor de entornos:
+  - `venv` (incluido en Python)
+---
+
+### **3.1 Clonar el repositorio**
+
+```bash
+git clone https://github.com/tu_usuario/ml-analyst-sivigila.git
+cd ml-analyst-sivigila
+```
+
+---
+
+###  **3.2. Crear y activar el entorno virtual**
+
+#### Windows (PowerShell)
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+#### Linux / macOS
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+---
+
+### **3.3 Instalar dependencias**
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
