@@ -4,7 +4,7 @@ Análisis exploratorio y modelado de datos epidemiológicos del sistema SIVIGILA
 
 ---
 
-## 📊 1. Objetivo del proyecto
+## 1. Objetivo del proyecto
 
 Este proyecto busca aplicar técnicas de **análisis exploratorio de datos (EDA)** y **machine learning** sobre reportes del sistema **SIVIGILA**, con el fin de:
 
@@ -14,7 +14,7 @@ Este proyecto busca aplicar técnicas de **análisis exploratorio de datos (EDA)
 
 ---
 
-## 🧱 2. Estructura del repositorio
+## 2. Estructura del repositorio
 
 ```bash
 ml-analyst-sivigila/
